@@ -1,0 +1,10 @@
+- [ ] Initial setup
+- [ ] Backend (API)
+  - [ ] File list
+  - [ ] Conversion job
+  - [ ] Sending to Kindle job
+- [ ] Frontend
+  - [ ] File list
+  - [ ] Job list
+- [ ] Docker container
+  - [ ] Send to hub.docker.com
