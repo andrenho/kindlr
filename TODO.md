@@ -1,8 +1,14 @@
 - [ ] Initial setup
+- [ ] Script to create the DB (run at container initialization)
+- [ ] Service
+  - [ ] Run jobs based on the DB
+    - [ ] Call kindlegen
+    - [ ] Send e-mail
 - [ ] Backend (API)
-  - [ ] File list
-  - [ ] Conversion job
-  - [ ] Sending to Kindle job
+  - [ ] Read file list, navigate in directories
+    - Don't allow to leave the specified directory
+  - [ ] Job management: start, remove, cancel, view status
+    - Just write to a DB
 - [ ] Frontend
   - [ ] File list
   - [ ] Job list
