@@ -1,16 +1,12 @@
 import os
 import sqlite3
 
-class Job:
-    def __init__(self, id, file, skip_conversion):
-        self.id = id
-        self.file = file
-        self.skip_conversion = skip_conversion
+from job import Job
 
 class DB:
 
     def __init__(self):
-        self.con = sqlite3.connect(os.environ['DB_DIR'] + '/kindlr.db')
+        self.con = self.open_connection()
         cur = self.con.cursor()
         cur.execute('''
             CREATE TABLE IF NOT EXISTS jobs (
@@ -32,11 +28,16 @@ class DB:
         return map(lambda r: Job(r[0], r[1], r[2]), rows)
 
     def set_step(self, job, step, state, message=None):
-        cur = self.con.cursor()
+        con = self.open_connection()
+        cur = con.cursor()
         cur.execute('''
             UPDATE jobs
                SET step = ?
                  , state = ?
                  , message = ?
-             WHERE id = ?''', (step, state, job, message))
-        self.con.commit()
+             WHERE id = ?''', (step, state, message, job))
+        con.commit()
+        con.close()
+
+    def open_connection(self):
+        return sqlite3.connect(os.environ['DB_DIR'] + '/kindlr.db', check_same_thread=False)
