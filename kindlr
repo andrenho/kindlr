@@ -1,0 +1,69 @@
+#!/bin/sh
+
+set -x
+
+#
+# read arguments
+#
+
+usage()
+{
+  echo "Usage: $0 [-k] my_book.epub"
+  echo "       -k: skips file conversion. Useful for PDFs."
+  exit 1
+}
+
+if ! { [ "$#" = 1 ] || { [ "$#" = 2 ] && [ "$1" == "-k" ]; }; }; then
+  usage
+fi
+
+if [ "$1" == "-k" ]; then
+  skip_conversion=true
+  book=$2
+else
+  skip_conversion=false
+  book=$1
+fi
+
+#
+# read config file
+#
+
+config_file()
+{
+  cat <<EOF
+Create a config file called ~/.kindlr with the following contents:
+
+email_to=dest@free.kindle.com
+EOF
+  exit 1
+}
+
+[ ! -f $HOME/.kindlr ] && config_file
+. $HOME/.kindlr
+
+#
+# convert book
+#
+
+if [ $skip_conversion = "false" ]; then
+  command -v kindlegen >/dev/null 2>&1 || { echo "kindlegen is not installed."; exit 1; }
+
+  converted=$(echo "$book" | cut -f 1 -d '.').azw
+  kindlegen "$book" -c2 -o "$converted" || exit 1
+else
+  converted="$book"
+fi
+
+#
+# mail the converted book
+#
+echo "Here's your book." | mailx -v --subject="$(echo "$book" | cut -f 1 -d '.')" --attach="$converted" $email_to
+echo "Book sent."
+
+#
+# remove converted book
+#
+if [ $skip_conversion = "false" ]; then
+  rm "$converted"
+fi
