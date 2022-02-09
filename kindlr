@@ -56,7 +56,7 @@ fi
 #
 # mail the converted book
 #
-echo "Here's your book." | mailx -v --subject="$(echo "$book" | cut -f 1 -d '.')" --attach="$converted" $email_to
+echo "Here's your book." | s-nail -v --subject="$(echo "$book" | cut -f 1 -d '.')" --attach="$converted" $email_to
 echo "Book sent."
 
 #
