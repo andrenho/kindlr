@@ -48,7 +48,7 @@ if [ $skip_conversion = "false" ]; then
   command -v kindlegen >/dev/null 2>&1 || { echo "kindlegen is not installed."; exit 1; }
 
   converted=$(echo "$book" | cut -f 1 -d '.').azw
-  kindlegen "$book" -c2 -o "$converted" || exit 1
+  kindlegen "$book" -c2 -o "$converted" #|| exit 1
 else
   converted="$book"
 fi
